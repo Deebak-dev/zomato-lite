@@ -82,90 +82,97 @@ export default function RestaurantPage() {
         ← Back
       </Link>
 
-      <div className="mt-6 flex gap-2">
-        <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-peppercorn/70">
-          {data.cuisine}
-        </span>
-        <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-peppercorn/70">
-          {data.area}
-        </span>
-      </div>
-
-      <h1 className="mt-4 text-3xl font-bold tracking-tight text-peppercorn">
-        {data.name}
-      </h1>
-
-      {hasReviews ? (
-        <div className="mt-6 flex items-center gap-3">
-          <span className="inline-flex items-center gap-1 rounded-md bg-rating-green px-2 py-1 text-sm font-semibold text-white">
-            <span aria-hidden>★</span>
-            {data.averageRating}
+      <section className="mt-4 rounded-2xl bg-white p-6 shadow-sm">
+        <div className="flex gap-2">
+          <span className="rounded-full bg-tyrolean px-3 py-1 text-xs font-medium text-peppercorn/70">
+            {data.cuisine}
           </span>
-          <span className="text-sm text-peppercorn/60">
-            {data.totalReviews} review{data.totalReviews === 1 ? "" : "s"}
+          <span className="rounded-full bg-tyrolean px-3 py-1 text-xs font-medium text-peppercorn/70">
+            {data.area}
           </span>
         </div>
-      ) : (
-        <div className="mt-6 flex items-center gap-3">
-          <span className="inline-flex items-center gap-1 rounded-md bg-rating-green px-2 py-1 text-sm font-semibold text-white">
-            <span aria-hidden>★</span>—
-          </span>
-          <span className="text-sm text-peppercorn/60">0 reviews yet</span>
-        </div>
-      )}
 
-      <div className="mt-8">
-        <Link
-          href={`/review/${params.id}`}
-          className="inline-block rounded-full bg-cranberry px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-cranberry-dark"
-        >
-          Write a review
-        </Link>
-      </div>
+        <h1 className="mt-4 text-3xl font-bold tracking-tight text-peppercorn">
+          {data.name}
+        </h1>
 
-      {data.latestReview && (
-        <section className="mt-10 rounded-lg border border-cranberry/20 bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-cranberry">
-            LATEST REVIEW
-          </p>
-          <p className="mt-2 text-lg font-semibold text-peppercorn">
-            {data.latestReview.comment}
-          </p>
-          <p className="mt-2 text-sm">
-            <Stars rating={data.latestReview.rating} />
-          </p>
-        </section>
-      )}
+        <div className="mt-6 flex flex-wrap items-center gap-4">
+          {hasReviews ? (
+            <div>
+              <div className="flex items-center gap-1 rounded-lg bg-rating-green px-3 py-2 text-white">
+                <span className="text-sm font-bold">★</span>
+                <span className="text-2xl font-bold">{data.averageRating}</span>
+              </div>
+              <p className="mt-2 text-xs text-peppercorn/50">
+                {data.totalReviews} review{data.totalReviews === 1 ? "" : "s"} at Zomato Lite
+              </p>
+            </div>
+          ) : (
+            <div>
+              <div className="flex items-center gap-1 rounded-lg bg-rating-green px-3 py-2 text-white">
+                <span className="text-2xl font-bold">—</span>
+              </div>
+              <p className="mt-2 text-xs text-peppercorn/50">
+                0 reviews yet — be the first
+              </p>
+            </div>
+          )}
 
-      {data.reviews.length > 0 && (
-        <section className="mt-6">
-          <ul className="space-y-4">
-            {data.reviews.map((review) => (
-              <li
-                key={review.id}
-                className="rounded-lg bg-white p-5 shadow-sm"
-              >
-                <p className="text-peppercorn">{review.comment}</p>
-                <p className="mt-1 text-sm">
-                  <Stars rating={review.rating} />
-                </p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {!hasReviews && (
-        <p className="mt-10 text-sm text-peppercorn/60">
-          No reviews yet.
           <Link
             href={`/review/${params.id}`}
-            className="ml-1 font-medium text-cranberry hover:underline"
+            className="ml-auto rounded-full bg-cranberry px-6 py-3 text-sm font-medium text-white shadow-md shadow-cranberry/30 transition-colors hover:bg-cranberry-dark"
           >
-            Write the first one.
+            Write a review
           </Link>
-        </p>
-      )}
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="px-1 text-sm font-semibold tracking-wide text-peppercorn/60">
+          OVERVIEW
+        </h2>
+        <div className="mt-3 space-y-4">
+          <div className="rounded-xl border border-cranberry/15 bg-white p-5 shadow-sm">
+            <p className="text-xs font-semibold tracking-wider text-cranberry">
+              LATEST REVIEW
+            </p>
+            <p className="mt-2 text-lg font-semibold text-peppercorn">
+              {data.latestReview?.comment}
+            </p>
+            {data.latestReview && (
+              <p className="mt-2 text-sm">
+                <Stars rating={data.latestReview.rating} />
+              </p>
+            )}
+          </div>
+
+          {data.reviews.map((review) => (
+            <div
+              key={review.id}
+              className="rounded-xl bg-white p-5 shadow-sm"
+            >
+              <p className="text-peppercorn">{review.comment}</p>
+              <p className="mt-2 text-sm">
+                <Stars rating={review.rating} />
+              </p>
+            </div>
+          ))}
+
+          {!hasReviews && (
+            <div className="rounded-xl bg-white p-6 text-center shadow-sm">
+              <p className="text-sm text-peppercorn/60">
+                No reviews yet.
+                <Link
+                  href={`/review/${params.id}`}
+                  className="ml-1 font-medium text-cranberry hover:underline"
+                >
+                  Write the first one.
+                </Link>
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
     </main>
   );
 }
