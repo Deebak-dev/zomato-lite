@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const STARS = [1, 2, 3, 4, 5];
 
@@ -48,55 +49,61 @@ export default function ReviewPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-[560px] flex-col justify-center px-6">
-      <h2 className="text-sm text-stone-500">Writing a review for</h2>
-      <h1 className="mb-10 mt-1 text-2xl font-semibold tracking-tight">
-        {restaurantName ?? "…"}
-      </h1>
+    <main className="mx-auto flex min-h-screen max-w-[520px] flex-col justify-center px-6 py-10">
+      <Link href={`/restaurant/${restaurantId}`} className="text-sm font-medium text-cranberry hover:underline">
+        ← Back to restaurant
+      </Link>
 
-      <div className="mb-2 flex gap-2" aria-label="Pick a rating from 1 to 5">
-        {STARS.map((star) => (
-          <button
-            key={star}
-            type="button"
-            aria-label={`${star} star${star > 1 ? "s" : ""}`}
-            onClick={() => setRating(star)}
-            className="text-3xl leading-none transition-colors"
-          >
-            <span
-              className={
-                rating !== null && star <= rating
-                  ? "text-amber-600"
-                  : "text-stone-300"
-              }
+      <div className="mt-6 rounded-lg bg-white p-6 shadow-sm">
+        <h2 className="text-sm text-peppercorn/60">Writing a review for</h2>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-peppercorn">
+          {restaurantName ?? "…"}
+        </h1>
+
+        <div className="mt-6 flex gap-2" aria-label="Pick a rating from 1 to 5">
+          {STARS.map((star) => (
+            <button
+              key={star}
+              type="button"
+              aria-label={`${star} star${star > 1 ? "s" : ""}`}
+              onClick={() => setRating(star)}
+              className="text-3xl leading-none transition-colors"
             >
-              ★
-            </span>
-          </button>
-        ))}
+              <span
+                className={
+                  rating !== null && star <= rating
+                    ? "text-star-amber"
+                    : "text-peppercorn/15 hover:text-star-amber/60"
+                }
+              >
+                ★
+              </span>
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-sm text-peppercorn/60">
+          {rating === null ? "Tap a star to rate." : `You picked ${rating} star${rating > 1 ? "s" : ""}.`}
+        </p>
+
+        <textarea
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="How was your meal?"
+          rows={4}
+          className="mt-6 min-h-32 resize-none rounded-lg border border-peppercorn/15 bg-tyrolean/50 p-4 text-peppercorn outline-none transition-colors focus:border-cranberry focus:bg-white"
+        />
+
+        {error && <p className="mt-4 text-sm text-cranberry">{error}</p>}
+
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={!canSubmit}
+          className="mt-6 w-full rounded-full bg-cranberry px-6 py-3 text-sm font-medium text-white transition-colors enabled:hover:bg-cranberry-dark disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Submit review
+        </button>
       </div>
-      <p className="mb-8 text-sm text-stone-500">
-        {rating === null ? "Tap a star to rate." : `You picked ${rating} star${rating > 1 ? "s" : ""}.`}
-      </p>
-
-      <textarea
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        placeholder="How was your meal?"
-        rows={4}
-        className="min-h-32 resize-none rounded-lg border border-stone-300 bg-white p-4 text-stone-900 outline-none focus:border-amber-600"
-      />
-
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
-
-      <button
-        type="button"
-        onClick={handleSubmit}
-        disabled={!canSubmit}
-        className="mt-6 rounded-lg bg-stone-900 px-6 py-3 text-sm font-medium text-white transition-colors enabled:hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-40"
-      >
-        Submit review
-      </button>
     </main>
   );
 }
